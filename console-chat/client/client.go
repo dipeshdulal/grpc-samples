@@ -15,6 +15,7 @@ import (
 
 var channelName = flag.String("channel", "default", "Channel name for chatting")
 var senderName = flag.String("sender", "default", "Senders name")
+var tcpServer = flag.String("server", ":5400", "Tcp server")
 
 func joinChannel(ctx context.Context, client chatpb.ChatServiceClient) {
 
@@ -72,7 +73,7 @@ func main() {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithBlock(), grpc.WithInsecure())
 
-	conn, err := grpc.Dial(":5400", opts...)
+	conn, err := grpc.Dial(*tcpServer, opts...)
 	if err != nil {
 		log.Fatalf("Fail to dail: %v", err)
 	}
