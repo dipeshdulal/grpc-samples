@@ -45,17 +45,13 @@ func (s *chatServiceServer) SendMessage(msgStream chatpb.ChatService_SendMessage
 		return err
 	}
 
-	fmt.Printf("Received Msg: %v \n", msg)
-
 	ack := chatpb.MessageAck{Status: "SENT"}
 	msgStream.SendAndClose(&ack)
 
 	go func() {
 		streams := s.channel[msg.Channel.Name]
-		for idx, msgChan := range streams {
-			fmt.Println("idx: ", idx)
+		for _, msgChan := range streams {
 			msgChan <- msg
-			fmt.Println("After here")
 		}
 	}()
 
