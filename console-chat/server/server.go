@@ -24,9 +24,13 @@ func (s *chatServiceServer) JoinChannel(ch *chatpb.Channel, msgStream chatpb.Cha
 
 	// doing this never closes the stream
 	for {
-		msg := <-msgChannel
-		fmt.Printf("GO ROUTINE (got message): %v \n", msg)
-		msgStream.Send(msg)
+		select {
+		case <-msgStream.Context().Done():
+			return nil
+		case msg := <-msgChannel:
+			fmt.Printf("GO ROUTINE (got message): %v \n", msg)
+			msgStream.Send(msg)
+		}
 	}
 }
 

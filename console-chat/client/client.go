@@ -40,7 +40,9 @@ func joinChannel(ctx context.Context, client chatpb.ChatServiceClient) {
 				log.Fatalf("Failed to receive message from channel joining. \nErr: %v", err)
 			}
 
-			fmt.Printf("MESSAGE: (%v) -> %v \n", in.Sender, in.Message)
+			if *senderName != in.Sender {
+				fmt.Printf("MESSAGE: (%v) -> %v \n", in.Sender, in.Message)
+			}
 		}
 	}()
 
